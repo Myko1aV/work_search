@@ -89,7 +89,6 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
                             <mainClass>com.architecture.ahfi.AhfiApplication</mainClass>
                         </manifest>
                     </archive>
