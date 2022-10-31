@@ -83,17 +83,11 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.architecture.ahfi.AhfiApplication</mainClass>
-                        </manifest>
-                    </archive>
-<!--                    <source>1.8</source>-->
-<!--                    <target>1.8</target>-->
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>
