@@ -39,7 +39,7 @@ public class VacancyServiceImpl implements VacancyService {
     public List<Vacancy> filter(List<Object> filters) {
         List<Vacancy> vacancies = getAll();
         List<Vacancy> result = new ArrayList<>();
-        result = filters.get(0) == null ? vacancies : vacancies.stream().filter(x -> x.getTitle().contains(filters.get(0).toString())).toList();
+        result = filters.get(0) == null ? vacancies : vacancies.stream().filter(x -> x.getTitle().contains(filters.get(0).toString())).collect(Collectors.toList());
         result = filters.get(1) == null ? result : result.stream().filter(x -> x.getExperience() <= (Integer) filters.get(1)).collect(Collectors.toList());
         result = filters.get(2) == null ? result : result.stream().filter(x -> x.getCity().contains(filters.get(2).toString())).collect(Collectors.toList());
         result = filters.get(3) == null ? result : result.stream().filter(x -> x.getCategoryID().getId() == filters.get(3)).collect(Collectors.toList());
