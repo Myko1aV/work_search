@@ -1,6 +1,6 @@
 package com.architecture.ahfi.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "`key`")

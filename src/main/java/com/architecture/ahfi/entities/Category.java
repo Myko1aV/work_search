@@ -3,7 +3,7 @@ package com.architecture.ahfi.entities;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.ToString;
 
 

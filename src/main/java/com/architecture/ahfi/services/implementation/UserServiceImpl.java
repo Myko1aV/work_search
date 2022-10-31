@@ -4,7 +4,7 @@ import com.architecture.ahfi.entities.Key;
 import com.architecture.ahfi.entities.User;
 import com.architecture.ahfi.repositories.UserRepository;
 import com.architecture.ahfi.services.UserService;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

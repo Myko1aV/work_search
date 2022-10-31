@@ -3,7 +3,7 @@ package com.architecture.ahfi.services.implementation;
 import com.architecture.ahfi.entities.Company;
 import com.architecture.ahfi.repositories.CompanyRepository;
 import com.architecture.ahfi.services.CompanyService;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
