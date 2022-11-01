@@ -14,7 +14,7 @@
     <name>AHFI</name>
     <description>AHFI</description>
     <properties>
-        <java.version>17</java.version>
+        <java.version>18.0.2</java.version>
     </properties>
     <dependencies>
         <dependency>
