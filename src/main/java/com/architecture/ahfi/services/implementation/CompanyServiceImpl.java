@@ -12,8 +12,13 @@ import java.util.NoSuchElementException;
 @Service
 @Transactional
 public class CompanyServiceImpl implements CompanyService {
-    @Autowired
+    final
     CompanyRepository repository;
+
+    public CompanyServiceImpl(CompanyRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public Company getById(Integer id) {
         return repository.findById(id).orElseThrow(()-> new NoSuchElementException("No such element exception"));

@@ -1,15 +1,21 @@
 package com.architecture.ahfi.services.implementation;
 
+import com.architecture.ahfi.Patterns.Facade.FilterFacade;
+import com.architecture.ahfi.Patterns.Facade.Filtering;
+import com.architecture.ahfi.Patterns.Facade.Sorting;
+import com.architecture.ahfi.Patterns.Facade.Type;
+import com.architecture.ahfi.Patterns.State;
+import com.architecture.ahfi.Patterns.*;
+
+
 import com.architecture.ahfi.entities.Vacancy;
 import com.architecture.ahfi.repositories.VacancyRepository;
 import com.architecture.ahfi.services.CompanyService;
 import com.architecture.ahfi.services.UserService;
 import com.architecture.ahfi.services.VacancyService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,12 +24,23 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class VacancyServiceImpl implements VacancyService {
-    @Autowired
+    private State state;
+    final
     VacancyRepository repository;
-    @Autowired
+    final
     UserService userService;
-    @Autowired
+    final
     CompanyService companyService;
+    final
+    FilterFacade facade;
+
+    public VacancyServiceImpl(VacancyRepository repository, UserService userService, CompanyService companyService) {
+        this.repository = repository;
+        this.userService = userService;
+        this.companyService = companyService;
+        this.state = null;
+        this.facade = null;
+    }
 
     @Override
     public Vacancy getOne(Integer id) {
@@ -36,16 +53,9 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<Vacancy> filter(List<Object> filters) {
-        List<Vacancy> vacancies = getAll();
-        List<Vacancy> result = new ArrayList<>();
-        result = filters.get(0) == null ? vacancies : vacancies.stream().filter(x -> x.getTitle().contains(filters.get(0).toString())).collect(Collectors.toList());
-        result = filters.get(1) == null ? result : result.stream().filter(x -> x.getExperience() <= (Integer) filters.get(1)).collect(Collectors.toList());
-        result = filters.get(2) == null ? result : result.stream().filter(x -> x.getCity().contains(filters.get(2).toString())).collect(Collectors.toList());
-        result = filters.get(3) == null ? result : result.stream().filter(x -> x.getCategoryID().getId() == filters.get(3)).collect(Collectors.toList());
-        result = filters.get(4) == null ? result : result.stream().filter(x -> x.getSalary() >= (Integer) filters.get(4)).collect(Collectors.toList());
-        result = sort(result, (Integer) filters.get(5));
-        return result;
+    public List<Vacancy> filter(List<Object> filters,  String type) {
+       FilterFacade facade = new FilterFacade(new Sorting(),new Filtering(),new Type());
+       return  facade.filter(filters, type);
     }
 
     @Override
@@ -66,21 +76,19 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public void approve(Integer id) {
-        Vacancy vacancy = getOne(id);
-        vacancy.setStatus(true);
-        save(vacancy);
-
+        State state = new ApprovedState(getOne(id));
+        save(state.vacancy);
     }
 
     @Override
     public void decline(Integer id) {
-        Vacancy vacancy = getOne(id);
-        vacancy.setStatus(false);
-        save(vacancy);
+        State state = new DeclinedState(getOne(id));
+        save(state.vacancy);
     }
 
     @Override
     public void save(Vacancy vacancy) {
+
         repository.save(vacancy);
     }
 
@@ -88,6 +96,11 @@ public class VacancyServiceImpl implements VacancyService {
     public void delete(Integer vacancyId) {
         getOne(vacancyId);
         repository.deleteById(vacancyId);
+    }
+
+    @Override
+    public void setState(State state) {
+
     }
 
     @Override

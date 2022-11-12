@@ -19,8 +19,13 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/vacancy")
 public class VacanciesController {
-    @Autowired
+    final
     VacancyService service;
+
+    public VacanciesController(VacancyService service) {
+        this.service = service;
+    }
+
     @GetMapping("")
     List<Vacancy> getAll() {
         return (List<Vacancy>) service.getAll();
@@ -85,10 +90,10 @@ public class VacanciesController {
         }
     }
     @GetMapping("/filter")
-    List<Vacancy> getFilteredVacancies(@RequestParam( value = "title", required = false) String title ,@RequestParam( value = "experience", required = false) Integer experience, @RequestParam( value = "city", required = false) String city, @RequestParam(value = "categoryID", required = false) Integer categoryId, @RequestParam(value = "salary", required = false) Integer salary , @RequestParam(value = "sort", required = true)  Integer sort) {
+    List<Vacancy> getFilteredVacancies(@RequestParam( value = "title", required = false) String title ,@RequestParam( value = "experience", required = false) Integer experience, @RequestParam( value = "city", required = false) String city, @RequestParam(value = "categoryID", required = false) Integer categoryId, @RequestParam(value = "salary", required = false) Integer salary , @RequestParam(value = "sort", required = true)  Integer sort, @RequestParam(value = "type", required = true)  String type) {
        List<Object> filters = Arrays.asList(title, experience, city, categoryId, salary, sort);
         System.out.println(filters);
-        return service.filter(filters);
+        return service.filter(filters,type);
     }
 
     @GetMapping("/user")

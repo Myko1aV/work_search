@@ -10,8 +10,12 @@ import java.util.NoSuchElementException;
 @Service
 @Transactional
 public class KeyServiceImpl implements KeyService {
-    @Autowired
+    final
     KeyRepository repository;
+
+    public KeyServiceImpl(KeyRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Integer getKeyValueById(Integer id) {

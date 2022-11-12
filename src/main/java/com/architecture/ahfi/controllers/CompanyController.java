@@ -17,8 +17,12 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/company")
 public class CompanyController {
-    @Autowired
+    final
     CompanyService service;
+
+    public CompanyController(CompanyService service) {
+        this.service = service;
+    }
 
     @GetMapping("")
     List<Company> getAll() {

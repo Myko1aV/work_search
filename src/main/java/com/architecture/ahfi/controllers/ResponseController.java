@@ -15,8 +15,12 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/Responses")
 public class ResponseController {
-    @Autowired
+    final
     ResponseService service;
+
+    public ResponseController(ResponseService service) {
+        this.service = service;
+    }
 
     @GetMapping("")
     List<Response> getAll() {

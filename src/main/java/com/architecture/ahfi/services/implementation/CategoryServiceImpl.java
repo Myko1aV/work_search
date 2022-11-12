@@ -13,8 +13,12 @@ import java.util.NoSuchElementException;
 @Service
 @Transactional
 public class CategoryServiceImpl implements CategoryService {
-    @Autowired
+    final
     CategoryRepository repository;
+
+    public CategoryServiceImpl(CategoryRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Category getById(Integer id) {

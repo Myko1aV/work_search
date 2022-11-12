@@ -15,8 +15,12 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/categories")
 public class CategoryController {
-    @Autowired
+    final
     CategoryService service;
+
+    public CategoryController(CategoryService service) {
+        this.service = service;
+    }
 
     @GetMapping("")
     List<Category> getAll() {

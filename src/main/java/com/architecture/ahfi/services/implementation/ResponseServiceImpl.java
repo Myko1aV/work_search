@@ -13,8 +13,12 @@ import java.util.NoSuchElementException;
 @Service
 @Transactional
 public class ResponseServiceImpl implements ResponseService {
-    @Autowired
+    final
     ResponseRepository repository;
+
+    public ResponseServiceImpl(ResponseRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Response getOne(Integer id) {

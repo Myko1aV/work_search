@@ -20,8 +20,6 @@ public class User {
     @Column(name = "experience")
     private Integer experience;
 
-    @Column(name = "keyId", nullable = false)
-    private Integer keyId;
 
     @ManyToMany
     @JoinTable(name = "userkeys",
@@ -61,13 +59,6 @@ public class User {
         this.experience = experience;
     }
 
-    public Integer getKeyId() {
-        return keyId;
-    }
-
-    public void setKeyId(Integer keyId) {
-        this.keyId = keyId;
-    }
 
     public Set<Key> getKeys() {
         return keys;

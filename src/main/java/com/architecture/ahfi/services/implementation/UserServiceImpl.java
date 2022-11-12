@@ -14,8 +14,13 @@ import java.util.Set;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-    @Autowired
+    final
     UserRepository repository;
+
+    public UserServiceImpl(UserRepository repository) {
+        this.repository = repository;
+    }
+
     @Override
     public User getUser(Integer id) {
         return repository.findById(id).orElseThrow(()-> new NoSuchElementException());

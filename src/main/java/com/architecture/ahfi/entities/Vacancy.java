@@ -1,6 +1,8 @@
 package com.architecture.ahfi.entities;
 
 import javax.persistence.*;
+
+import com.architecture.ahfi.Patterns.State;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -126,6 +128,7 @@ public class Vacancy {
         return experience;
     }
 
+//    public abstract void changeState(State state);
     public void setExperience(Integer experience) {
         this.experience = experience;
     }
