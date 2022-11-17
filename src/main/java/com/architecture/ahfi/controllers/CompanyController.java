@@ -3,13 +3,10 @@ package com.architecture.ahfi.controllers;
 
 import com.architecture.ahfi.entities.Company;
 import com.architecture.ahfi.services.CompanyService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -38,6 +35,36 @@ public class CompanyController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    //cтв ред вид
+    @PutMapping("/{id}")
+    ResponseEntity<?> updateCompany(@PathVariable Integer id, @RequestBody Company company) {
+        try {
+            service.getById(id);
+            company.setId(id);
+            service.save(company);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("")
+    ResponseEntity<?> addCompany(@RequestBody Company company) {
+        try {
+            service.save(company);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (HttpClientErrorException.BadRequest e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteCompany(@PathVariable Integer id) {
+        try {
+            service.getById(id);
+            service.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

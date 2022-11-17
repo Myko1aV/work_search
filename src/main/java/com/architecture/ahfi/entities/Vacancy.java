@@ -27,11 +27,11 @@ public class Vacancy {
     @Column(name = "salary", nullable = false)
     private Integer salary;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "companyID", nullable = false)
     private Company companyID;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "categoryID", nullable = false)
     private Category categoryID;
 

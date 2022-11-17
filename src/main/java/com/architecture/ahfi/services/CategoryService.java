@@ -8,4 +8,8 @@ import java.util.List;
 public interface CategoryService {
     Category getById(Integer id);
     List<Category> getAll();
+
+    void save(Category category);
+    void delete(Integer id);
+
 }

@@ -3,7 +3,6 @@ package com.architecture.ahfi.controllers;
 
 import com.architecture.ahfi.entities.Category;
 import com.architecture.ahfi.services.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +35,36 @@ public class CategoryController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    //cтв ред вид
+    @PutMapping("/{id}")
+    ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody Category category) {
+        try {
+            service.getById(id);
+            category.setId(id);
+            service.save(category);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("")
+    ResponseEntity<Category> addCategory(@RequestBody Category category) {
+        try {
+            service.save(category);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (HttpClientErrorException.BadRequest e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("/{id}")
+    ResponseEntity<Category> deleteCategory(@PathVariable Integer id) {
+        try {
+            service.getById(id);
+            service.delete(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

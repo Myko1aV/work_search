@@ -8,4 +8,7 @@ public interface CompanyService {
     Company getById(Integer id);
     List<Company> getAll();
 
+    void save(Company company);
+    void delete(Integer id);
+
 }

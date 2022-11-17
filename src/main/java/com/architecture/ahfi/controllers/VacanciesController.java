@@ -71,7 +71,7 @@ public class VacanciesController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping("/decline")
+    @PutMapping("/decline/{id}")
     ResponseEntity<?> decline(@PathVariable Integer id) {
         try {
             service.decline(id);
@@ -80,7 +80,7 @@ public class VacanciesController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @PutMapping("/approve")
+    @PutMapping("/approve/{id}")
     ResponseEntity<?> approve(@PathVariable Integer id) {
         try {
             service.approve(id);

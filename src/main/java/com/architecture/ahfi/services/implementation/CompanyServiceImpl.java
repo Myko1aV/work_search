@@ -28,4 +28,13 @@ public class CompanyServiceImpl implements CompanyService {
     public List<Company> getAll() {
         return (List<Company>) repository.findAll();
     }
+
+    @Override
+    public void save(Company company) {
+        repository.save(company);
+    }
+    @Override
+    public void delete(Integer id) {
+        repository.deleteById(id);
+    }
 }
