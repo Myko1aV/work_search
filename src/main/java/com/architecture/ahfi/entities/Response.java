@@ -1,8 +1,11 @@
 package com.architecture.ahfi.entities;
 
+import lombok.Data;
+
 import javax.persistence.*;
 
 
+@Data
 @Entity
 @Table(name = "response")
 public class Response {

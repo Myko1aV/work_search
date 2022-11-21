@@ -1,7 +1,9 @@
 package com.architecture.ahfi.entities;
 
-import javax.persistence.*;
+import lombok.Data;
 
+import javax.persistence.*;
+@Data
 @Entity
 @Table(name = "`key`")
 public class Key {

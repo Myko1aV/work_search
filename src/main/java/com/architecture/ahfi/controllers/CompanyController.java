@@ -2,12 +2,15 @@ package com.architecture.ahfi.controllers;
 
 
 import com.architecture.ahfi.entities.Company;
+import com.architecture.ahfi.entities.Response;
 import com.architecture.ahfi.services.CompanyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
+import javax.naming.CompositeName;
 import java.util.List;
 import java.util.NoSuchElementException;
 

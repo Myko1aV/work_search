@@ -5,10 +5,11 @@ import com.architecture.ahfi.Patterns.Facade.Filtering;
 import com.architecture.ahfi.Patterns.Facade.Sorting;
 import com.architecture.ahfi.Patterns.Facade.Type;
 import com.architecture.ahfi.Patterns.State;
-import com.architecture.ahfi.Patterns.*;
 
 
+import com.architecture.ahfi.entities.Response;
 import com.architecture.ahfi.entities.Vacancy;
+import com.architecture.ahfi.repositories.ResponseRepository;
 import com.architecture.ahfi.repositories.VacancyRepository;
 import com.architecture.ahfi.services.CompanyService;
 import com.architecture.ahfi.services.UserService;
@@ -76,14 +77,17 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public void approve(Integer id) {
-        State state = new ApprovedState(getOne(id));
-        save(state.vacancy);
+//        State state = new ApprovedState(getOne(id));
+        Vacancy vacancy = getOne(id);
+        vacancy.setStatus(true);
+        save(vacancy);
     }
 
     @Override
     public void decline(Integer id) {
-        State state = new DeclinedState(getOne(id));
-        save(state.vacancy);
+        Vacancy vacancy = getOne(id);
+        vacancy.setStatus(false);
+        save(vacancy);
     }
 
     @Override
@@ -99,11 +103,6 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public void setState(State state) {
-
-    }
-
-    @Override
     public List<Vacancy> getAllByCompany(Integer companyId) {
         companyService.getById(companyId);
         return repository.getAllByCompanyID(companyId);
@@ -114,4 +113,6 @@ public class VacancyServiceImpl implements VacancyService {
         // User user = userService. ;
         return null;
     }
+
+
 }

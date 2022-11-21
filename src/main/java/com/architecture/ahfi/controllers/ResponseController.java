@@ -26,11 +26,11 @@ public class ResponseController {
     List<Response> getAll() {
         return service.getAll();
     }
-    @GetMapping("/user")
+    @GetMapping("/user/{id}")
     List<Response> getAllByUser(@PathVariable Integer id) {
         return service.getAllByUser(id);
     }
-    @GetMapping("/vacancy")
+    @GetMapping("/vacancy/{id}")
     List<Response> getAllByVacancy(@PathVariable Integer id) {
         return service.getAllByVacancy(id);
     }

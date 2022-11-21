@@ -1,9 +1,12 @@
 package com.architecture.ahfi.entities;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "user")
 public class User {
@@ -11,6 +14,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
+
+    @Column(name = "email", length = 30)
+    private String email;
 
     @Column(name = "name", length = 30)
     private String name;
@@ -21,52 +27,15 @@ public class User {
     @Column(name = "experience")
     private Integer experience;
 
+    @Column(name = "isAdmin")
+    private Boolean isAdmin;
 
-    @ManyToMany
-    @JoinTable(name = "userkeys",
-            joinColumns = @JoinColumn(name = "userID"),
-            inverseJoinColumns = @JoinColumn(name = "keyID"))
-    private Set<Key> keys = new LinkedHashSet<>();
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public Integer getExperience() {
-        return experience;
-    }
-
-    public void setExperience(Integer experience) {
-        this.experience = experience;
-    }
-
-
-    public Set<Key> getKeys() {
-        return keys;
-    }
-
-    public void setKeys(Set<Key> keys) {
-        this.keys = keys;
-    }
+    @Column(name = "keys")
+    private String keys;
+    //    @ManyToMany
+//    @JoinTable(name = "userkeys",
+//            joinColumns = @JoinColumn(name = "userID"),
+//            inverseJoinColumns = @JoinColumn(name = "keyID"))
+//    private Set<Key> keys = new LinkedHashSet<>();
 
 }
