@@ -1,26 +1,20 @@
 package com.architecture.ahfi.services.implementation;
 
 import com.architecture.ahfi.Patterns.Facade.FilterFacade;
-import com.architecture.ahfi.Patterns.Facade.Filtering;
-import com.architecture.ahfi.Patterns.Facade.Sorting;
-import com.architecture.ahfi.Patterns.Facade.Type;
 import com.architecture.ahfi.Patterns.State;
 
 
-import com.architecture.ahfi.entities.Response;
+import com.architecture.ahfi.entities.Key;
 import com.architecture.ahfi.entities.Vacancy;
-import com.architecture.ahfi.repositories.ResponseRepository;
 import com.architecture.ahfi.repositories.VacancyRepository;
 import com.architecture.ahfi.services.CompanyService;
+import com.architecture.ahfi.services.KeyService;
 import com.architecture.ahfi.services.UserService;
 import com.architecture.ahfi.services.VacancyService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,11 +29,13 @@ public class VacancyServiceImpl implements VacancyService {
     CompanyService companyService;
     final
     FilterFacade facade;
+    final KeyService keyRepository;
 
-    public VacancyServiceImpl(VacancyRepository repository, UserService userService, CompanyService companyService) {
+    public VacancyServiceImpl(VacancyRepository repository, UserService userService, CompanyService companyService, KeyService keyRepository) {
         this.repository = repository;
         this.userService = userService;
         this.companyService = companyService;
+        this.keyRepository = keyRepository;
         this.state = null;
         this.facade = null;
     }
@@ -55,8 +51,8 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<Vacancy> filter(List<Object> filters,  String type) {
-        List<Vacancy> result =  getAll();
+    public List<Vacancy> filter(List<Object> filters, String type) {
+        List<Vacancy> result = getAll();
 
         result = filters.get(0) == null ? result : result.stream().filter(x -> x.getTitle().contains(filters.get(0).toString())).collect(Collectors.toList());
         result = filters.get(1) == null ? result : result.stream().filter(x -> x.getExperience() <= (Integer) filters.get(1)).collect(Collectors.toList());
@@ -64,7 +60,7 @@ public class VacancyServiceImpl implements VacancyService {
         result = filters.get(3) == null ? result : result.stream().filter(x -> x.getCategoryID().getId() == filters.get(3)).collect(Collectors.toList());
         result = filters.get(4) == null ? result : result.stream().filter(x -> x.getSalary() >= (Integer) filters.get(4)).collect(Collectors.toList());
         result = filters.get(5) == null ? result : sort(result, (Integer) filters.get(5));
-        return  result;
+        return result;
     }
 
     @Override
@@ -118,8 +114,30 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public List<Vacancy> showСompatible(Integer userId) {
-        // User user = userService. ;
-        return null;
+        List<String> userKeys = new ArrayList<>(userService.getUserKeys(userId));
+        List<Key> keys = (List<Key>) keyRepository.getAll();
+        List<Vacancy> vacancies = getAll();
+        Map<Integer, Integer> vacancyPopularity = new TreeMap<>();
+        for (int i = 0; i < vacancies.size(); i++) {
+            Integer value = 0;
+            for (int j = 0; j < userKeys.size(); j++) {
+                if (vacancies.get(i).getDescription().toLowerCase().contains(userKeys.get(j).toLowerCase())) {
+                    value += keyRepository.getValueByName(userKeys.get(j));
+                }
+            }
+            vacancyPopularity.put(vacancies.get(i).getId(), value);
+        }
+        LinkedHashMap<Integer, Integer> sortedMap = vacancyPopularity.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder() /* Optional: Comparator.reverseOrder() */))
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new));
+        sortedMap.values().removeIf((x) -> x <= 0);
+        List<Vacancy> result = new ArrayList<>();
+        for (Integer id : sortedMap.keySet()) {
+            result.add(getOne(id));
+        }
+        return result;
     }
 
 

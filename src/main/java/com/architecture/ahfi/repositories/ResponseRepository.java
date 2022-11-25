@@ -8,9 +8,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ResponseRepository extends CrudRepository<Response, Integer> {
-    @Query("select r from Response r where r.userID = :userId")
+    @Query("select r from Response r where r.userID.id = :userId")
     List<Response> getResponsesByUserID(@Param("userId") Integer userId);
 
-    @Query("select r from Response r where r.vacancyID = :vacantionId")
+    @Query("select r from Response r where r.vacancyID.id = :vacantionId")
     List<Response> getResponsesByVacancyID(@Param("vacantionId") Integer vacantionId);
 }

@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -54,8 +55,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Set<String> getUserKeys(Integer id) {
-        return (Set<String>) Arrays.stream(getUser(id).getKeys().split(",")).distinct();
+        return Arrays.stream(getUser(id).getKeys().split(",")).collect(Collectors.toSet());
     }
 
-
+//ABOUT THE CLIENT Founded in 1996, our customer is a German digital job marketplace for specialists and executives. The companies of all sizes and industries in need can find first-class employees through the marketplace’s web app and online services.  Our customer’s team consists of 200 people. As a subsidiary ofMedienUnion, Ludwigshafen, it has been working with renowned publishers for many years. Advertisements placed with the customer’s applications are published free of charge on the job markets of more than 400 partners’ platforms as part of a target group concept for the advertiser. Java
 }
