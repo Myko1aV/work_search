@@ -32,10 +32,6 @@ public class User {
 
     @Column(name = "keys")
     private String keys;
-    //    @ManyToMany
-//    @JoinTable(name = "userkeys",
-//            joinColumns = @JoinColumn(name = "userID"),
-//            inverseJoinColumns = @JoinColumn(name = "keyID"))
-//    private Set<Key> keys = new LinkedHashSet<>();
+
 
 }

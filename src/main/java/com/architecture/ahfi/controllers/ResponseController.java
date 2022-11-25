@@ -3,12 +3,16 @@ package com.architecture.ahfi.controllers;
 
 import com.architecture.ahfi.entities.Response;
 import com.architecture.ahfi.services.ResponseService;
+import com.architecture.ahfi.services.UserService;
+import com.architecture.ahfi.services.VacancyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -18,6 +22,11 @@ public class ResponseController {
     final
     ResponseService service;
 
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    VacancyService vacancyService;
     public ResponseController(ResponseService service) {
         this.service = service;
     }
@@ -59,12 +68,15 @@ public class ResponseController {
     }
 
     @PostMapping("")
-    ResponseEntity<?> addResponse(@RequestBody Response Response) {
+    ResponseEntity<?> addResponse(@RequestParam(name = "userId") Integer userId , @RequestParam(name = "VacancyId") Integer vacancyId, @RequestParam(name = "file") MultipartFile file) {
         try {
-            service.save(Response);
+            Response response = new Response(userService.getUser(userId),vacancyService.getOne(vacancyId),file.getBytes());
+             service.save(response);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (HttpClientErrorException.BadRequest e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

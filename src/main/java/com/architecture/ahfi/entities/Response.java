@@ -57,4 +57,9 @@ public class Response {
         this.file = file;
     }
 
+    public Response( User user,Vacancy vacancy,byte[] file){
+        this.file= file;
+        this.userID= user;
+        this.vacancyID=vacancy;
+    }
 }

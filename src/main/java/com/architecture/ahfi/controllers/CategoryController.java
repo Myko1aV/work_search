@@ -15,6 +15,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/categories")
+@CrossOrigin(origins ="*")
 public class CategoryController {
     final
     CategoryService service;

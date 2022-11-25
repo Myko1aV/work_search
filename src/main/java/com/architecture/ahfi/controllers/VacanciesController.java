@@ -18,6 +18,7 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/vacancy")
+@CrossOrigin(origins ="*")
 public class VacanciesController {
     final
     VacancyService service;
@@ -71,7 +72,7 @@ public class VacanciesController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping("/decline/{id}")
+    @PostMapping("/decline/{id}")
     ResponseEntity<?> decline(@PathVariable Integer id) {
         try {
             service.decline(id);
@@ -80,7 +81,7 @@ public class VacanciesController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @PutMapping("/approve/{id}")
+    @PostMapping("/approve/{id}")
     ResponseEntity<?> approve(@PathVariable Integer id) {
         try {
             service.approve(id);
@@ -91,7 +92,7 @@ public class VacanciesController {
     }
     @GetMapping("/filter")
     List<Vacancy> getFilteredVacancies(@RequestParam( value = "title", required = false) String title ,@RequestParam( value = "experience", required = false) Integer experience, @RequestParam( value = "city", required = false) String city, @RequestParam(value = "categoryID", required = false) Integer categoryId, @RequestParam(value = "salary", required = false) Integer salary , @RequestParam(value = "sort", required = true)  Integer sort, @RequestParam(value = "type", required = true)  String type) {
-       List<Object> filters = Arrays.asList(title, experience, city, categoryId, salary, sort);
+        List<Object> filters = Arrays.asList(title, experience, city, categoryId, salary, sort);
         System.out.println(filters);
         return service.filter(filters,type);
     }

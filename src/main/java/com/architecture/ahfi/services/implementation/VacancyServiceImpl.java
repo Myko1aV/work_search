@@ -17,6 +17,7 @@ import com.architecture.ahfi.services.VacancyService;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -55,8 +56,15 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public List<Vacancy> filter(List<Object> filters,  String type) {
-       FilterFacade facade = new FilterFacade(new Sorting(),new Filtering(),new Type());
-       return  facade.filter(filters, type);
+        List<Vacancy> result =  getAll();
+
+        result = filters.get(0) == null ? result : result.stream().filter(x -> x.getTitle().contains(filters.get(0).toString())).collect(Collectors.toList());
+        result = filters.get(1) == null ? result : result.stream().filter(x -> x.getExperience() <= (Integer) filters.get(1)).collect(Collectors.toList());
+        result = filters.get(2) == null ? result : result.stream().filter(x -> x.getCity().contains(filters.get(2).toString())).collect(Collectors.toList());
+        result = filters.get(3) == null ? result : result.stream().filter(x -> x.getCategoryID().getId() == filters.get(3)).collect(Collectors.toList());
+        result = filters.get(4) == null ? result : result.stream().filter(x -> x.getSalary() >= (Integer) filters.get(4)).collect(Collectors.toList());
+        result = filters.get(5) == null ? result : sort(result, (Integer) filters.get(5));
+        return  result;
     }
 
     @Override
