@@ -7,6 +7,9 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "user")
 public class User {
@@ -31,7 +34,7 @@ public class User {
     private Boolean isAdmin;
 
     @Column(name = "keys")
-    private String keys;
+    private String userKeys;
 
 
 }
