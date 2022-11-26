@@ -3,11 +3,9 @@ package com.architecture.ahfi.services.implementation;
 import com.architecture.ahfi.entities.Category;
 import com.architecture.ahfi.entities.Company;
 import com.architecture.ahfi.entities.Vacancy;
-import com.architecture.ahfi.repositories.VacancyRepository;
 import com.architecture.ahfi.services.CategoryService;
 import com.architecture.ahfi.services.CompanyService;
 import com.architecture.ahfi.services.VacancyService;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -16,10 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.lang.Thread.sleep;
@@ -102,7 +98,7 @@ class VacancyServiceImplTest {
     @ParameterizedTest
     void filter(List<Object> filters, List<Object> expected) {
 
-        List<Vacancy> vacancyList = service.filter(filters,"admin");
+        List<Vacancy> vacancyList = service.filter(filters, null);
         assertEquals(vacancyList.toString(), expected.toString());
     }
 

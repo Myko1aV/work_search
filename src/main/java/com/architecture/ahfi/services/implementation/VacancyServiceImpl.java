@@ -51,9 +51,9 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<Vacancy> filter(List<Object> filters, String type, Integer userId) {
+    public List<Vacancy> filter(List<Object> filters, Integer userId) {
         List<Vacancy> result = new ArrayList<>();
-        if(type!=null) result = showСompatible(userId);
+        if(userId!=null) result = showСompatible(userId);
         else result = getAll();
         result = filters.get(0) == null ? result : result.stream().filter(x -> x.getTitle().contains(filters.get(0).toString())).collect(Collectors.toList());
         result = filters.get(1) == null ? result : result.stream().filter(x -> x.getExperience() <= (Integer) filters.get(1)).collect(Collectors.toList());

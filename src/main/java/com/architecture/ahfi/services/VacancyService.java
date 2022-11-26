@@ -9,7 +9,7 @@ public interface VacancyService {
 
     List<Vacancy> getAll();
 
-    List<Vacancy> filter(List<Object> filters, String type, Integer userId);
+    List<Vacancy> filter(List<Object> filters, Integer userId);
 
     List<Vacancy> sort(List<Vacancy> vacancies, Integer parameter);
 
