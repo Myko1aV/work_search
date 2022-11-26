@@ -6,6 +6,7 @@ import com.architecture.ahfi.services.ResponseService;
 import com.architecture.ahfi.services.UserService;
 import com.architecture.ahfi.services.VacancyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,10 +45,15 @@ public class ResponseController {
         return service.getAllByVacancy(id);
     }
     @GetMapping("/{id}")
-    ResponseEntity<Response> getOne(@PathVariable Integer id) {
+    ResponseEntity<?> getOne(@PathVariable Integer id) {
         try {
+
+            HttpHeaders header = new HttpHeaders();
+
+            header.set("Content-Disposition", "attachment; filename=" + "123");
+
             Response Response = service.getOne(id);
-            return new ResponseEntity<>(Response, HttpStatus.OK);
+            return new ResponseEntity<>(Response.getFile(),header, HttpStatus.OK);
         } catch (NoSuchElementException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -71,7 +77,7 @@ public class ResponseController {
     ResponseEntity<?> addResponse(@RequestParam(name = "userId") Integer userId , @RequestParam(name = "VacancyId") Integer vacancyId, @RequestParam(name = "file") MultipartFile file) {
         try {
             Response response = new Response(userService.getUser(userId),vacancyService.getOne(vacancyId),file.getBytes());
-             service.save(response);
+            service.save(response);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (HttpClientErrorException.BadRequest e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -80,7 +86,7 @@ public class ResponseController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     ResponseEntity<?> deleteResponse(@PathVariable Integer id) {
         try {
             service.getOne(id);

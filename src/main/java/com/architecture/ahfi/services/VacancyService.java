@@ -1,7 +1,5 @@
 package com.architecture.ahfi.services;
 
-import com.architecture.ahfi.Patterns.State;
-import com.architecture.ahfi.entities.Response;
 import com.architecture.ahfi.entities.Vacancy;
 
 import java.util.List;
@@ -11,7 +9,7 @@ public interface VacancyService {
 
     List<Vacancy> getAll();
 
-    List<Vacancy> filter(List<Object> filters, String type);
+    List<Vacancy> filter(List<Object> filters, String type, Integer userId);
 
     List<Vacancy> sort(List<Vacancy> vacancies, Integer parameter);
 
