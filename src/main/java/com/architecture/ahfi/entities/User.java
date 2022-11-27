@@ -33,7 +33,7 @@ public class User {
     @Column(name = "isAdmin")
     private Boolean isAdmin;
 
-    @Column(name = "keys")
+    @Column(name = "userKeys")
     private String userKeys;
 
 
