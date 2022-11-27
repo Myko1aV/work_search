@@ -1,4 +1,4 @@
-package com.architecture.ahfi;
+package com.architecture.ahfi.configuration;
 
 
 import org.springframework.context.annotation.Bean;
@@ -22,7 +22,7 @@ public class MyConfiguration extends WebSecurityConfigurerAdapter
     protected void configure(HttpSecurity http) throws Exception {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000/"));
+        corsConfiguration.addAllowedOriginPattern("*");
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setExposedHeaders(List.of("Authorization"));
