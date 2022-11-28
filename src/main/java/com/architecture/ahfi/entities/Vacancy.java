@@ -21,7 +21,7 @@ public class Vacancy {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "title", length = 50)
+    @Column(name = "title", length = 150)
     private String title;
 
     @Column(name = "status")
@@ -37,7 +37,7 @@ public class Vacancy {
     @JoinColumn(name = "categoryID", nullable = false)
     private Category categoryID;
 
-    @Column(name = "description", length = 1000)
+    @Column(name = "description")
     private String description;
 
     @Column(name = "createdAt", nullable = false)
