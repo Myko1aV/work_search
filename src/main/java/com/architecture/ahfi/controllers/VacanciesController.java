@@ -40,7 +40,7 @@ public class VacanciesController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping("/{id}")
+    @PostMapping("/update/{id}")
     ResponseEntity<?> updateVacancy(@PathVariable Integer id, @RequestBody Vacancy vacancy) {
         try {
             service.getOne(id);

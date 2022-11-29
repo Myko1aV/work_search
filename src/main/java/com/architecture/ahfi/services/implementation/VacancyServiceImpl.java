@@ -97,7 +97,8 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public void save(Vacancy vacancy) {
-
+//        String[] keys = getPopularWords(vacancy.getDescription());
+//        System.out.println(keys);
         repository.save(vacancy);
     }
 
@@ -140,6 +141,27 @@ public class VacancyServiceImpl implements VacancyService {
         }
         return result;
     }
-
+    String[] getPopularWords(String text){
+        int count ,maxCount = 0;
+      List<String> words=  Arrays.stream(text.split("\\s+")).filter((x)->x.length()>4).collect(Collectors.toList());
+             String[] finalWords = new String[3];
+         for (int i = 0; i < 3; i++) {
+             for (int j = 0; j < words.size(); j++) {
+                 count = 1;
+                 for (int k = j+1; k < words.size(); k++) {
+                     if(words.get(j).equals(words.get(k))){
+                         count++;
+                     }
+                 }
+                 if(count > maxCount){
+                     maxCount = count;
+                     finalWords[i] = words.get(j);
+                     String popular = words.get(j);
+                     words.removeIf((x)->x.equals(popular));
+                 }
+             }
+        }
+         return finalWords;
+    }
 
 }
