@@ -3,7 +3,7 @@ package com.architecture.ahfi.services.implementation;
 import com.architecture.ahfi.entities.Response;
 import com.architecture.ahfi.repositories.ResponseRepository;
 import com.architecture.ahfi.services.ResponseService;
-import jakarta.transaction.Transactional;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,8 +13,12 @@ import java.util.NoSuchElementException;
 @Service
 @Transactional
 public class ResponseServiceImpl implements ResponseService {
-    @Autowired
+    final
     ResponseRepository repository;
+
+    public ResponseServiceImpl(ResponseRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Response getOne(Integer id) {

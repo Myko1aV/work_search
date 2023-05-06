@@ -18,9 +18,15 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/vacancy")
+@CrossOrigin(origins ="*")
 public class VacanciesController {
-    @Autowired
+    final
     VacancyService service;
+
+    public VacanciesController(VacancyService service) {
+        this.service = service;
+    }
+
     @GetMapping("")
     List<Vacancy> getAll() {
         return (List<Vacancy>) service.getAll();
@@ -34,7 +40,7 @@ public class VacanciesController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping("/{id}")
+    @PostMapping("/update/{id}")
     ResponseEntity<?> updateVacancy(@PathVariable Integer id, @RequestBody Vacancy vacancy) {
         try {
             service.getOne(id);
@@ -56,7 +62,7 @@ public class VacanciesController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     ResponseEntity<?> deleteVacancy(@PathVariable Integer id) {
         try {
             service.getOne(id);
@@ -66,7 +72,7 @@ public class VacanciesController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping("/decline")
+    @PostMapping("/decline/{id}")
     ResponseEntity<?> decline(@PathVariable Integer id) {
         try {
             service.decline(id);
@@ -75,7 +81,7 @@ public class VacanciesController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    @PutMapping("/approve")
+    @PostMapping("/approve/{id}")
     ResponseEntity<?> approve(@PathVariable Integer id) {
         try {
             service.approve(id);
@@ -85,10 +91,10 @@ public class VacanciesController {
         }
     }
     @GetMapping("/filter")
-    List<Vacancy> getFilteredVacancies(@RequestParam( value = "title", required = false) String title ,@RequestParam( value = "experience", required = false) Integer experience, @RequestParam( value = "city", required = false) String city, @RequestParam(value = "categoryID", required = false) Integer categoryId, @RequestParam(value = "salary", required = false) Integer salary , @RequestParam(value = "sort", required = true)  Integer sort) {
-       List<Object> filters = Arrays.asList(title, experience, city, categoryId, salary, sort);
+    List<Vacancy> getFilteredVacancies(@RequestParam( value = "title", required = false) String title ,@RequestParam( value = "experience", required = false) Integer experience, @RequestParam( value = "city", required = false) String city, @RequestParam(value = "categoryID", required = false) Integer categoryId, @RequestParam(value = "salary", required = false) Integer salary , @RequestParam(value = "sort", required = true)  Integer sort  ,@RequestParam(value = "userId", required = false) Integer userId) {
+        List<Object> filters = Arrays.asList(title, experience, city, categoryId, salary, sort);
         System.out.println(filters);
-        return service.filter(filters);
+        return service.filter(filters,userId);
     }
 
     @GetMapping("/user")

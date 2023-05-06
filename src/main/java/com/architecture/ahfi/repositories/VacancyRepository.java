@@ -11,4 +11,7 @@ import java.util.List;
 public interface VacancyRepository extends CrudRepository<Vacancy, Integer> {
     @Query("select v from Vacancy v where v.companyID.id = :companyId")
     List<Vacancy> getAllByCompanyID(@Param("companyId") Integer companyId);
+
+    @Query("select v from Vacancy v where v.status = :status")
+    List<Vacancy> getVacanciesByStatus(@Param("status") Boolean status);
 }

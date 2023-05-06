@@ -2,18 +2,18 @@ package com.architecture.ahfi.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-
-import jakarta.persistence.*;
 import lombok.ToString;
 
+import javax.persistence.*;
 
-@Entity
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
+@Entity
 @Table(name = "category")
 public class Category {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 

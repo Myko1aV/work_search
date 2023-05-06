@@ -1,12 +1,19 @@
 package com.architecture.ahfi.entities;
 
-import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "response")
 public class Response {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -53,4 +60,9 @@ public class Response {
         this.file = file;
     }
 
+    public Response( User user,Vacancy vacancy,byte[] file){
+        this.file= file;
+        this.userID= user;
+        this.vacancyID=vacancy;
+    }
 }

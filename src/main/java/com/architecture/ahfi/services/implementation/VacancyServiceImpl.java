@@ -1,29 +1,44 @@
 package com.architecture.ahfi.services.implementation;
 
+import com.architecture.ahfi.Patterns.Facade.FilterFacade;
+import com.architecture.ahfi.Patterns.State;
+
+
+import com.architecture.ahfi.entities.Key;
 import com.architecture.ahfi.entities.Vacancy;
 import com.architecture.ahfi.repositories.VacancyRepository;
 import com.architecture.ahfi.services.CompanyService;
+import com.architecture.ahfi.services.KeyService;
 import com.architecture.ahfi.services.UserService;
 import com.architecture.ahfi.services.VacancyService;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import javax.transaction.Transactional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class VacancyServiceImpl implements VacancyService {
-    @Autowired
+    private State state;
+    final
     VacancyRepository repository;
-    @Autowired
+    final
     UserService userService;
-    @Autowired
+    final
     CompanyService companyService;
+    final
+    FilterFacade facade;
+    final KeyService keyRepository;
+
+    public VacancyServiceImpl(VacancyRepository repository, UserService userService, CompanyService companyService, KeyService keyRepository) {
+        this.repository = repository;
+        this.userService = userService;
+        this.companyService = companyService;
+        this.keyRepository = keyRepository;
+        this.state = null;
+        this.facade = null;
+    }
 
     @Override
     public Vacancy getOne(Integer id) {
@@ -36,15 +51,16 @@ public class VacancyServiceImpl implements VacancyService {
     }
 
     @Override
-    public List<Vacancy> filter(List<Object> filters) {
-        List<Vacancy> vacancies = getAll();
+    public List<Vacancy> filter(List<Object> filters, Integer userId) {
         List<Vacancy> result = new ArrayList<>();
-        result = filters.get(0) == null ? vacancies : vacancies.stream().filter(x -> x.getTitle().contains(filters.get(0).toString())).toList();
+        if(userId!=null) result = showСompatible(userId);
+        else result = getAll();
+        result = filters.get(0) == null ? result : result.stream().filter(x -> x.getTitle().contains(filters.get(0).toString())).collect(Collectors.toList());
         result = filters.get(1) == null ? result : result.stream().filter(x -> x.getExperience() <= (Integer) filters.get(1)).collect(Collectors.toList());
         result = filters.get(2) == null ? result : result.stream().filter(x -> x.getCity().contains(filters.get(2).toString())).collect(Collectors.toList());
         result = filters.get(3) == null ? result : result.stream().filter(x -> x.getCategoryID().getId() == filters.get(3)).collect(Collectors.toList());
         result = filters.get(4) == null ? result : result.stream().filter(x -> x.getSalary() >= (Integer) filters.get(4)).collect(Collectors.toList());
-        result = sort(result, (Integer) filters.get(5));
+        result = filters.get(5) == null ? result : sort(result, (Integer) filters.get(5));
         return result;
     }
 
@@ -66,10 +82,10 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public void approve(Integer id) {
+//        State state = new ApprovedState(getOne(id));
         Vacancy vacancy = getOne(id);
         vacancy.setStatus(true);
         save(vacancy);
-
     }
 
     @Override
@@ -81,6 +97,8 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public void save(Vacancy vacancy) {
+//        String[] keys = getPopularWords(vacancy.getDescription());
+//        System.out.println(keys);
         repository.save(vacancy);
     }
 
@@ -98,7 +116,52 @@ public class VacancyServiceImpl implements VacancyService {
 
     @Override
     public List<Vacancy> showСompatible(Integer userId) {
-        // User user = userService. ;
-        return null;
+        List<String> userKeys = new ArrayList<>(userService.getUserKeys(userId));
+        List<Key> keys = (List<Key>) keyRepository.getAll();
+        List<Vacancy> vacancies = getAll();
+        Map<Integer, Integer> vacancyPopularity = new TreeMap<>();
+        for (int i = 0; i < vacancies.size(); i++) {
+            Integer value = 0;
+            for (int j = 0; j < userKeys.size(); j++) {
+                if (vacancies.get(i).getDescription().toLowerCase().contains(userKeys.get(j).toLowerCase())) {
+                    value += keyRepository.getValueByName(userKeys.get(j));
+                }
+            }
+            vacancyPopularity.put(vacancies.get(i).getId(), value);
+        }
+        LinkedHashMap<Integer, Integer> sortedMap = vacancyPopularity.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder() /* Optional: Comparator.reverseOrder() */))
+                .collect(Collectors.toMap(Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new));
+        sortedMap.values().removeIf((x) -> x <= 0);
+        List<Vacancy> result = new ArrayList<>();
+        for (Integer id : sortedMap.keySet()) {
+            result.add(getOne(id));
+        }
+        return result;
     }
+    String[] getPopularWords(String text){
+        int count ,maxCount = 0;
+      List<String> words=  Arrays.stream(text.split("\\s+")).filter((x)->x.length()>4).collect(Collectors.toList());
+             String[] finalWords = new String[3];
+         for (int i = 0; i < 3; i++) {
+             for (int j = 0; j < words.size(); j++) {
+                 count = 1;
+                 for (int k = j+1; k < words.size(); k++) {
+                     if(words.get(j).equals(words.get(k))){
+                         count++;
+                     }
+                 }
+                 if(count > maxCount){
+                     maxCount = count;
+                     finalWords[i] = words.get(j);
+                     String popular = words.get(j);
+                     words.removeIf((x)->x.equals(popular));
+                 }
+             }
+        }
+         return finalWords;
+    }
+
 }

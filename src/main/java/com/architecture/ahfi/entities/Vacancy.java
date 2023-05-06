@@ -1,7 +1,10 @@
 package com.architecture.ahfi.entities;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
+
+import com.architecture.ahfi.Patterns.State;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -9,6 +12,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor
+@Data
 @Entity
 @Table(name = "vacancy")
 public class Vacancy {
@@ -17,7 +21,7 @@ public class Vacancy {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "title", length = 50)
+    @Column(name = "title", length = 150)
     private String title;
 
     @Column(name = "status")
@@ -33,7 +37,7 @@ public class Vacancy {
     @JoinColumn(name = "categoryID", nullable = false)
     private Category categoryID;
 
-    @Column(name = "description", length = 1000)
+    @Column(name = "description")
     private String description;
 
     @Column(name = "createdAt", nullable = false)
@@ -50,83 +54,5 @@ public class Vacancy {
         this.createdAt = date;
     }
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getSalary() {
-        return salary;
-    }
-
-    public void setSalary(Integer salary) {
-        this.salary = salary;
-    }
-
-    public Company getCompanyID() {
-        return companyID;
-    }
-
-    public void setCompanyID(Company companyID) {
-        this.companyID = companyID;
-    }
-
-    public Category getCategoryID() {
-        return categoryID;
-    }
-
-    public void setCategoryID(Category categoryID) {
-        this.categoryID = categoryID;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDate getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public Integer getExperience() {
-        return experience;
-    }
-
-    public void setExperience(Integer experience) {
-        this.experience = experience;
-    }
 }

@@ -1,11 +1,14 @@
 package com.architecture.ahfi.entities;
 
-import jakarta.persistence.*;
+import lombok.Data;
 
+import javax.persistence.*;
+@Data
 @Entity
 @Table(name = "`key`")
 public class Key {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
